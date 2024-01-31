@@ -5,13 +5,14 @@ const { HDate } = require('@hebcal/core'); // ייבוא חבילת תאריכי
 
 
 const create = async (req, res) => {
-    // let userName;
-    function openFile (filePath)  {
+ 
+    let arryRes = [];
+
+    function openFile(filePath) {
         let content = fs.readFileSync(path.resolve(__dirname, filePath), { encoding: 'utf8', flag: 'r' });
         return content;
     }
 
-    // let fileName = '../import/abc.dat';
     let fileName = '../uploads/dataInput.dat';
     let r = openFile(fileName);
     let lines = r.split('\n'); // הכלת כל שורה כמערך
@@ -21,6 +22,7 @@ const create = async (req, res) => {
 
 
     let idData = {};
+    
 
     for (let line of data) {
         let idValue = line[0];
@@ -133,19 +135,38 @@ const create = async (req, res) => {
 
         let userName = Number(idValue) > 0 ? getUserById(Number(idValue)) : console.log("finish");;// קבלת שם האברך לפי המספר שלו
         let csvFileName = `${userName}.csv`; // יצירת שם קובץ עבור כל אברך
-
-
-        // idData[idValue].forEach(i => {
-        //     i[3] == "0" ? i[3] = "כניסה" : i[3] = "יציאה";
-        // }); // כניסה ויציאה במקום 0 ו-1
-
         let csvContent = idData[idValue].map(line => line.join(',')).join('\n'); // יצירת תוכן הקובץ
 
         fs.writeFileSync(path.resolve(__dirname, '../export', csvFileName), csvContent); // יצירת הקובץ
-    }
 
-    // return  userName;
+
+
+        //יצירת מערך לצירוף לשליחה ללקוח
+        let userArry = idData[idValue];
+
+        //הסרת העמודות הלא רלוונטיות
+        userArry.map(line => {
+            line.splice(4, 1);
+            line.splice(5, 1);
+            line.splice(6, 1);
+            line.splice(7, 1);
+            line.splice(8, 1);
+        });
+     
+        function arrySendFunc(arry, name) {
+            arry.push(name) //דחיפת שם האברך לסוף המערך
+            return arry;
+        }
+
+        let arrySend = arrySendFunc(userArry, userName)
+        arryRes.push(arrySend);
+        // console.log(arrySend);
+
+
+    }
+    return arryRes;
 }
+
 
 module.exports = {
     create

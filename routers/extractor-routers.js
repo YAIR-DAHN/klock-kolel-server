@@ -6,7 +6,6 @@ const path = require('path');
 
 router.get('/', extractorController.create);
 router.get('/download', extractorController.download);
-// router.post('/upload', extractorController.upload);
 
 // קבלת הקובץ מהלקוח ושמירתו בתיקית היבוא
 const storage = multer.diskStorage({
@@ -26,6 +25,13 @@ router.post('/upload', upload.single('file'), (req, res) => {
   res.sendStatus(200);
 });
 
+// const upload = multer({ storage: multer.memoryStorage() });
+
+// router.post('/upload', upload.single('file'), (req, res) => {
+//   const fileContents = req.file.buffer.toString();  // המר את הקובץ למחרוזת
+//   console.log(fileContents);  // הדפס את המחרוזת
+//   res.sendStatus(200);
+// });
 
 
 module.exports = router;

@@ -10,10 +10,7 @@ const port = 3000;
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
-// app.get('/download', function(req, res){
-//     const file = path.resolve(__dirname, './export', "הרב מרציאנו.csv"); // הנתיב לקובץ
-//     res.download(file); // שליחת הקובץ
-// });
+
 app.use('/extractor', extractorRouter);
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
